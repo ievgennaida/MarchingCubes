@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/MarchingCubes/.vs/MarchingCubes/v15
+/.vs
+/MarchingCubes/MarchingCubes/obj
+/MarchingCubes/MarchingCubes.Test/obj/Debug
+/MarchingCubes/MarchingCubesDemo.WPF/obj/Debug
+/MarchingCubes/packages/MSTest.TestAdapter.1.2.0/build
+/MarchingCubes/packages/MSTest.TestAdapter.1.2.0
+/MarchingCubes/packages/MSTest.TestFramework.1.2.0
