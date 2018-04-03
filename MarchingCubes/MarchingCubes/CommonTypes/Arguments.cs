@@ -1,12 +1,14 @@
 ﻿
-using GradientDescentLogic;
-using GradientDescentLogic.CommonTypes;
+using MarchingCubes;
+using MarchingCubes.CommonTypes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
-namespace GradientDescent.CommonTypes
+namespace MarchingCubes.CommonTypes
 {
+    [DebuggerDisplay("P {X},{Y},{Z}")]
     public class Arguments : List<Variable>
     {
         public Arguments(double x, double y, double z = 0)

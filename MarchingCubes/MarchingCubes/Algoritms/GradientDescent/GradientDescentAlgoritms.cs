@@ -1,7 +1,7 @@
-﻿using GradientDescent.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 using System;
 
-namespace GradientDescent.Algoritms.GradientDescent
+namespace MarchingCubes.Algoritms.GradientDescent
 {
     public class GradientDescentAlgoritm
     {

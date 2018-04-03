@@ -1,6 +1,6 @@
-﻿using GradientDescent.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 
-namespace GradientDescent.Algoritms.GradientDescent
+namespace MarchingCubes.Algoritms.GradientDescent
 {
     public class GradientResultItem
     {

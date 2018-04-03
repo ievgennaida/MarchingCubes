@@ -1,7 +1,7 @@
-﻿using GradientDescentLogic.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 using System.Collections.Generic;
 
-namespace GradientDescent.CommonTypes
+namespace MarchingCubes.CommonTypes
 {
     public class Trajectory : List<Arguments>
     {

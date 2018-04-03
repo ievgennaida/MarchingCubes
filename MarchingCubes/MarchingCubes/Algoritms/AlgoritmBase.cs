@@ -1,6 +1,6 @@
-﻿using GradientDescent.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 
-namespace GradientDescent.Algoritms
+namespace MarchingCubes.Algoritms
 {
     public abstract class AlgoritmBase
     {

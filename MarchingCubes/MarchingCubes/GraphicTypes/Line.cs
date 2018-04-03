@@ -1,7 +1,7 @@
-﻿using GradientDescent.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 using System;
 
-namespace GradientDescent.GraphicTypes
+namespace MarchingCubes.GraphicTypes
 {
     public class Line
     {

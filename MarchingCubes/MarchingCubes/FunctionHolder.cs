@@ -1,8 +1,8 @@
-﻿using GradientDescent.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
 using System;
 using System.Collections.Generic;
 
-namespace GradientDescent
+namespace MarchingCubes
 {
     public delegate double Function(Arguments args);
 
@@ -10,7 +10,7 @@ namespace GradientDescent
     {
     }
 
-    public class FunctionHolder : ICloneable
+    public class FunctionHolder //: ICloneable
     {
         private int dimension;
         private Function function;

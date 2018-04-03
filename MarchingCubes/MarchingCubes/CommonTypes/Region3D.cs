@@ -1,7 +1,7 @@
-﻿using GradientDescent.GraphicTypes;
+﻿using MarchingCubes.GraphicTypes;
 using System;
 
-namespace GradientDescentLogic.CommonTypes
+namespace MarchingCubes.CommonTypes
 {
     /// <summary>
     /// Type to present the max and min bounds 
@@ -11,12 +11,14 @@ namespace GradientDescentLogic.CommonTypes
     {
         public Region3D() { }
 
-        public Region3D(double x, double maxX, double y, double maxY)
+        public Region3D(double x, double maxX, double y, double maxY, double z = 0, double maxZ = 0)
         {
             this.MinX = x;
             this.MaxX = maxX;
             this.MinY = y;
             this.MaxY = maxY;
+            this.MinZ = z;
+            this.MaxZ = maxZ;
         }
 
         public double MinX { get; set; }
@@ -140,7 +142,7 @@ namespace GradientDescentLogic.CommonTypes
         }
         public static bool operator ==(Region3D r1, Region3D r2)
         {
-            if (Object.ReferenceEquals(r1,null))
+            if (Object.ReferenceEquals(r1, null))
                 return false;
             return r1.Equals(r2);
         }

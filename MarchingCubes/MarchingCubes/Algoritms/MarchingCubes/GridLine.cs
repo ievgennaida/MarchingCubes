@@ -1,11 +1,11 @@
-﻿using GradientDescent.CommonTypes;
-using GradientDescent.GraphicTypes;
-using GradientDescentLogic.Algoritms.CountorLines;
+﻿using MarchingCubes.CommonTypes;
+using MarchingCubes.GraphicTypes;
+using MarchingCubes.Algoritms.CountorLines;
 using System;
 
-namespace GradientDescent.Algoritms.CountorLines
+namespace MarchingCubes.Algoritms.CountorLines
 {
-    public class GridLine : Line, ICloneable
+    public class GridLine : Line//, ICloneable
     {
         public GridLine(Arguments point1, Arguments point2)
             : base(point1, point2)

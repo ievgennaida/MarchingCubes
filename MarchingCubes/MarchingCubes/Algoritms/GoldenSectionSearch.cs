@@ -1,9 +1,9 @@
 ﻿using System;
-using GradientDescent.CommonTypes;
-using GradientDescent.GraphicTypes;
-using GradientDescentLogic.Algoritms;
+using MarchingCubes.CommonTypes;
+using MarchingCubes.GraphicTypes;
+using MarchingCubes.Algoritms;
 
-namespace GradientDescent.Algoritms
+namespace MarchingCubes.Algoritms
 {
     /// <summary>
     /// The golden-section search is a technique for finding the extremum (minimum or maximum) 

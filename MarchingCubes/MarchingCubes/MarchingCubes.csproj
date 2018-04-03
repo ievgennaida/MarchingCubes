@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Algoritms\CountorLines\ContourLinesProcessor.cs" />
+    <Folder Include="Algoritms\InterpolationAlgoritms\" />
   </ItemGroup>
 
 </Project>

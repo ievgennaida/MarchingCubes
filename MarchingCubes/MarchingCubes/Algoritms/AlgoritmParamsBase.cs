@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GradientDescent.CommonTypes;
+using MarchingCubes.CommonTypes;
 
-namespace GradientDescent.Algoritms
+namespace MarchingCubes.Algoritms
 {
     public class AlgoritmParamsBase
     {

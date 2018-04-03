@@ -1,7 +1,7 @@
 ﻿using System;
-using GradientDescent.CommonTypes;
+using MarchingCubes.CommonTypes;
 
-namespace GradientDescent.Algoritms
+namespace MarchingCubes.Algoritms
 {
     /// <summary>
     /// Чисельне знаходження значення похідної в точці

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GradientDescent.CommonTypes
+namespace MarchingCubes.CommonTypes
 {
     public class Variable : IVariable
     {

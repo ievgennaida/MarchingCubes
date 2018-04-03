@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using GradientDescent.CommonTypes;
-using GradientDescent.GraphicTypes;
-namespace GradientDescent.Algoritms.CountorLines
+using MarchingCubes.CommonTypes;
+using MarchingCubes.GraphicTypes;
+namespace MarchingCubes.Algoritms.CountorLines
 {
-    public class GridRectangle : ICloneable
+    public class GridRectangle //: ICloneable
     {
         /// <summary>
         /// Right=0,Top=1,Left=2,Bottom=3

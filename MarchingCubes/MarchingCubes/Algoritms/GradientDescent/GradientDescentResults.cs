@@ -1,10 +1,10 @@
-﻿using GradientDescent.CommonTypes;
-using GradientDescentLogic.CommonTypes;
+﻿using MarchingCubes.CommonTypes;
+using MarchingCubes.CommonTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GradientDescent.Algoritms.GradientDescent
+namespace MarchingCubes.Algoritms.GradientDescent
 {
     public class GradientDescentResults : List<GradientResultItem>
     {

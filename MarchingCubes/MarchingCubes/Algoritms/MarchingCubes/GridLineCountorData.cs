@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GradientDescent.CommonTypes;
+using MarchingCubes.CommonTypes;
 
-namespace GradientDescentLogic.Algoritms.CountorLines
+namespace MarchingCubes.Algoritms.CountorLines
 {
     public class GridLineCountorData
     {

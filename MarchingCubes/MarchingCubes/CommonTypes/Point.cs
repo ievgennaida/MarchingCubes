@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace GradientDescentLogic.CommonTypes
+namespace MarchingCubes.CommonTypes
 {
     [DebuggerDisplay("P {X}{Y}{Z}")]
     public class Point
