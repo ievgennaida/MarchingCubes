@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MarchingCubes.Algoritms.CountorLines;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MarchingCubes.Test
 {
@@ -13,41 +14,29 @@ namespace MarchingCubes.Test
         {
             var size = 10;
             var gridSize = 10;
-            
-            var one = Сheck(size, gridSize);
-            var cube = one[0];
-            Assert.AreEqual(cube.Vertex[0], new CommonTypes.Arguments(0, 0, 0));
-            Assert.AreEqual(cube.Vertex[1], new CommonTypes.Arguments(gridSize, 0, 0));
-            Assert.AreEqual(cube.Vertex[2], new CommonTypes.Arguments(gridSize, 0, gridSize));
-            Assert.AreEqual(cube.Vertex[3], new CommonTypes.Arguments(0, 0, gridSize));
-
-            Assert.AreEqual(cube.Vertex[4], new CommonTypes.Arguments(0, gridSize, 0));
-            Assert.AreEqual(cube.Vertex[5], new CommonTypes.Arguments(gridSize, gridSize, 0));
-            Assert.AreEqual(cube.Vertex[6], new CommonTypes.Arguments(gridSize, gridSize, gridSize));
-            Assert.AreEqual(cube.Vertex[7], new CommonTypes.Arguments(0, gridSize, gridSize));
-        }
-
-        [TestMethod]
-        public void CheckCountOfUniqueLines()
-        {
-            var size = 10;
-            var gridSize = 5;
-
-            // side = 12
-            // sides count 3
-            // margins for side =9
-            // count of margins = 2
-
-            //uniqueEdgesCount = oneSideEdjes * (vertexPerSide + 1) + ((vertexPerSide + 1) * (vertexPerSide + 1));
-
-
             Сheck(size, gridSize);
         }
 
-        public List<GridCube> Сheck(int size, int gridSize)
+        [TestMethod]
+        public void Check8Cubes()
         {
-            var edgesPerSide = size / gridSize;
-            var countOfCubes = Math.Pow(edgesPerSide,3);
+            var size = 10;
+            var gridSize = 5;
+            Сheck(size, gridSize);
+        }
+
+        [TestMethod]
+        public void Check27Cubes()
+        {
+            var size = 15;
+            var gridSize = 5;
+            Сheck(size, gridSize);
+        }
+
+        public List<GridCube> Сheck(int size, int step)
+        {
+            var edgesPerSide = size / step;
+            var countOfCubes = Math.Pow(edgesPerSide, 3);
 
             var vertexPerSide = edgesPerSide + 1;
             var uniqueEdgesPerSide = edgesPerSide * vertexPerSide;
@@ -56,9 +45,9 @@ namespace MarchingCubes.Test
             var edjesCount = vertexPerSide * uniqueEdgesPerSide + (vertexPerSide * vertexPerSide * edgesPerSide);
 
 
-            var marchingCubes = new AdaptiveMarchingCubes(null);
-            var region = new CommonTypes.Region3D(0, size, 0, size, 0, size);
-            var cubes = marchingCubes.BuildGrid(region, gridSize);
+            var marchingCubes = new Algoritms.CountorLines.MarchingCubes(null);
+            var region = new CommonTypes.Region3D(0, size, 0, size- step- step, 0, size);
+            var cubes = marchingCubes.BuildGrid(region, step);
 
             Assert.AreEqual(cubes.Count, countOfCubes);
 
@@ -77,7 +66,25 @@ namespace MarchingCubes.Test
 
             Assert.AreEqual(lines.Count, edjesCount);
 
+            // Check last cube vertex
+            var firstCube = cubes.FirstOrDefault();
+            CheckVertexes(firstCube, 0, step);
+            var lastCube = cubes.LastOrDefault();
+            CheckVertexes(lastCube, size - step, size);
             return cubes;
+        }
+
+        private static void CheckVertexes(GridCube cube, int start, int end)
+        {
+            Assert.AreEqual(cube.Vertex[0], new CommonTypes.Arguments(start, start, start));
+            Assert.AreEqual(cube.Vertex[1], new CommonTypes.Arguments(end, start, start));
+            Assert.AreEqual(cube.Vertex[2], new CommonTypes.Arguments(end, start, end));
+            Assert.AreEqual(cube.Vertex[3], new CommonTypes.Arguments(start, start, end));
+
+            Assert.AreEqual(cube.Vertex[4], new CommonTypes.Arguments(start, end, start));
+            Assert.AreEqual(cube.Vertex[5], new CommonTypes.Arguments(end, end, start));
+            Assert.AreEqual(cube.Vertex[6], new CommonTypes.Arguments(end, end, end));
+            Assert.AreEqual(cube.Vertex[7], new CommonTypes.Arguments(start, end, end));
         }
     }
 }

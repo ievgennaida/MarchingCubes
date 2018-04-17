@@ -6,12 +6,9 @@ using System.Collections.Generic;
 namespace MarchingCubes.Algoritms.CountorLines
 {
     /// <summary>
-    /// Використані алгоритми:
-    /// Marching Cubes та
-    /// Adaptive Marching Cubes
-    /// 3D випадок
+    /// Marching cubes algorithm.
     /// </summary>
-    public class AdaptiveMarchingCubes
+    public class MarchingCubes
     {
         FunctionHolder function;
         // double meshSize;
@@ -19,7 +16,7 @@ namespace MarchingCubes.Algoritms.CountorLines
         public GridRectangle[][] rectangles = null;
         public List<GridCube> cubes = null;
 
-        public AdaptiveMarchingCubes(FunctionHolder function)
+        public MarchingCubes(FunctionHolder function)
         {
             this.function = function;
             //this.meshSize = meshSize;
@@ -110,8 +107,8 @@ namespace MarchingCubes.Algoritms.CountorLines
             // Rectangle indexes: Left 0, Top 1, Right 2, Bottom 3
             // Cube indexes: Front 0 Left 1 Bottom 2, 
 
-            var totalRows = 0;
-            var totalColumns = 0;
+            var totalX = 0;
+            var totalZ = 0;
 
             var column = 0;
             var prevColumn = 0;
@@ -123,22 +120,20 @@ namespace MarchingCubes.Algoritms.CountorLines
 
                 var depth = 0;
                 var prevDepth = 0;
-                var currentZcolumn = 0;
+                var zIndex = 0;
                 for (var z = region.MinZ; z < region.MaxZ;)
                 {
                     var isLastDepth = (z + step) > region.MaxZ;
                     var isFirstZ = depth == 0;
                     var nextZValue = isLastDepth ? region.MaxZ : z + step;
-                    currentZcolumn++;
+                    zIndex++;
 
-                    var row = 0;
+                    var xIndex = 0;
                     var prevX = region.MinX;
-
-                    var currentRow = 0;
                     for (var x = region.MinX; x < region.MaxX;)
                     {
                         var isLastX = (x + step) > region.MaxX;
-                        var isFirstX = row == 0;
+                        var isFirstX = xIndex == 0;
                         var nextXValue = isLastX ? region.MaxX : x + step;
 
                         if (!isLastColumn && !isLastX && !isLastDepth || (isFirstX && isLastX))
@@ -152,18 +147,20 @@ namespace MarchingCubes.Algoritms.CountorLines
                             GridCube prevYCube = null;
                             if (!isFirstY)
                             {
-                                prevYCube = toReturn[currentRow - totalRows - totalColumns];
+                                var index = toReturn.Count  - totalZ * totalX;
+                                prevYCube = toReturn[index];
                             }
 
                             GridCube prevZCube = null;
                             if (!isFirstZ)
                             {
-                                prevZCube = toReturn[currentRow - totalRows];
+                                var index = toReturn.Count - totalX;
+                                prevZCube = toReturn[index];
                             }
 
                             var newCube = new GridCube();
 
-                            // Dont create the duplicate objects. 
+                            // Dont create object duplicates. Cube edges are merged. 
                             var edges = new List<GridLine>();
                             //0
                             var edge = MergeEdge(prevYCube, 4, prevZCube, 2);
@@ -173,35 +170,40 @@ namespace MarchingCubes.Algoritms.CountorLines
                             newCube.Vertex[1] = edge.Point2;
 
                             //1
-                            edge = MergeEdge(prevYCube, 5, prevXCube, 3);
+                            edge = MergeEdge(prevYCube, 5);//, prevXCube, 3);
                             edge = edge == null ? new GridLine(new Arguments(nextXValue, y, z)/*1*/, new Arguments(nextXValue, y, nextZValue)/*2*/) : edge;
                             edges.Add(edge);
 
+                            edge = null;
                             //2
-                            edge = MergeEdge(prevYCube, 6, prevZCube, 0);
-                            edge = edge == null ? new GridLine(new Arguments(nextXValue, y, nextZValue)/*2*/, new Arguments(x, y, nextZValue)/*3*/) : edge;
+                            edge = MergeEdge(prevYCube, 6);//, prevZCube, 0);
+                            edge = edge == null ? new GridLine(new Arguments(x, y, nextZValue)/*3*/, new Arguments(nextXValue, y, nextZValue)/*2*/) : edge;
                             edges.Add(edge);
 
-                            newCube.Vertex[2] = edge.Point1;
-                            newCube.Vertex[3] = edge.Point2;
+                            newCube.Vertex[2] = edge.Point2;
+                            newCube.Vertex[3] = edge.Point1;
 
+                            edge = null;
                             //3
                             edge = MergeEdge(prevXCube, 1, prevYCube, 7);
                             edge = edge == null ? new GridLine(new Arguments(x, y, nextZValue)/*3*/, new Arguments(x, y, z)/*0*/) : edge;
                             edges.Add(edge);
 
-                            //4
-                            edge = MergeEdge(prevYCube, 0, prevZCube, 6);
+                            edge = null;
+                            //4 broken
+                            edge = MergeEdge(prevZCube, 6);//prevYCube, 0);//, );
                             edge = edge == null ? new GridLine(new Arguments(x, nextYValue, z)/*4*/, new Arguments(nextXValue, nextYValue, z)/*5*/ ) : edge;
                             edges.Add(edge);
 
                             newCube.Vertex[4] = edge.Point1;
                             newCube.Vertex[5] = edge.Point2;
 
+                            edge = null;
                             //5
                             edge = new GridLine(new Arguments(nextXValue, nextYValue, z)/*5*/, new Arguments(nextXValue, nextYValue, nextZValue)/*6*/);
                             edges.Add(edge);
 
+                            edge = null;
                             //6
                             edge = new GridLine(new Arguments(x, nextYValue, nextZValue)/*7*/, new Arguments(nextXValue, nextYValue, nextZValue)/*6*/);
                             edges.Add(edge);
@@ -209,25 +211,30 @@ namespace MarchingCubes.Algoritms.CountorLines
                             newCube.Vertex[6] = edge.Point2;
                             newCube.Vertex[7] = edge.Point1;
 
-                            //7
-                            edge = MergeEdge(prevXCube, 5, prevYCube, 3);
+                            edge = null;
+                            //7 broken
+                            edge = MergeEdge(prevXCube, 5);//, prevYCube, 3);
                             edge = edge == null ? new GridLine(new Arguments(x, nextYValue, z)/*4*/, new Arguments(x, nextYValue, nextZValue)/*7*/) : edge;
                             edges.Add(edge);
 
+                            edge = null;
                             //8
                             edge = MergeEdge(prevXCube, 9, prevZCube, 11);
                             edge = edge == null ? new GridLine(new Arguments(x, y, z)/*0*/, new Arguments(x, nextYValue, z)/*4*/) : edge;
                             edges.Add(edge);
 
+                            edge = null;
                             //9
-                            edge = MergeEdge(prevZCube, 10, null, 0);
+                            edge = MergeEdge(prevZCube, 10);
                             edge = edge == null ? new GridLine(new Arguments(nextXValue, y, z)/*1*/, new Arguments(nextXValue, nextYValue, z)/*5*/ ) : edge;
                             edges.Add(edge);
 
+                            edge = null;
                             //10
                             edge = new GridLine(new Arguments(nextXValue, y, nextZValue)/*2*/, new Arguments(nextXValue, nextYValue, nextZValue)/*6*/);
                             edges.Add(edge);
 
+                            edge = null;
                             //11
                             edge = MergeEdge(prevXCube, 10, null, 0);
                             edge = edge == null ? new GridLine(new Arguments(x, y, nextZValue)/*3*/, new Arguments(x, nextYValue, nextZValue)/*7*/) : edge;
@@ -241,16 +248,18 @@ namespace MarchingCubes.Algoritms.CountorLines
                         }
 
                         prevX = x;
-                        row++;
+                        xIndex++;
                         x = nextXValue;
                     }
 
-                    totalRows = currentRow;
+                    totalX = xIndex;
 
                     prevDepth = depth;
                     depth++;
                     z = nextZValue;
                 }
+
+                totalZ = zIndex;
 
                 prevColumn = column;
                 column++;
@@ -262,8 +271,8 @@ namespace MarchingCubes.Algoritms.CountorLines
 
         private static GridLine MergeEdge(GridCube cube1,
             int index1,
-            GridCube cube2,
-            int index2)
+            GridCube cube2 = null,
+            int index2 = 0)
         {
             if (cube1 != null)
             {

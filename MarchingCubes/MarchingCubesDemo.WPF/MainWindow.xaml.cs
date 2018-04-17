@@ -29,7 +29,7 @@ namespace MarchingCubesDemo.WPF
         public MainWindow()
         {
             InitializeComponent();
-            DrawGridLines();
+            DrawGridLines(currentCube);
 
 
             this.Camera.Transform = trackball.Transform;
@@ -37,7 +37,7 @@ namespace MarchingCubesDemo.WPF
             this.Camera.Width = 4;
 
             this.Loaded += OnLoaded;
- //           graph3DContainer = new Graph3DContainer(Viewport);
+            //           graph3DContainer = new Graph3DContainer(Viewport);
             // listBoxPresenter = new CountorLineListBoxPresenter(tbCounturValue, lbContourLinesList);
             this.Headlight.Transform = trackball.Transform;
         }
@@ -51,36 +51,100 @@ namespace MarchingCubesDemo.WPF
             trackball.Camera = this.Camera;
         }
 
-        private void DrawGridLines()
+        int? currentCube = null;
+        private int? DrawGridLines(int? index)
         {
             var modelToAdd = new ModelVisual3D();
-            var size = 10;
+            var size = 15;
             var step = 5;
-            var marchingCubes = new AdaptiveMarchingCubes(null);
+            var marchingCubes = new MarchingCubes.Algoritms.CountorLines.MarchingCubes(null);
             var region = new Region3D(0, size, 0, size, 0, size);
             var cubes = marchingCubes.BuildGrid(region, step);
 
             var lines = new List<GridLine>();
+            //foreach (var cube in cubes)
+
+            if (index.HasValue)
+            {
+                if (index <= 0)
+                {
+                    index = 0;
+                }
+                else if (cubes.Count <= index)
+                {
+                    index = 0;
+                }
+            }
+
             foreach (var cube in cubes)
             {
-                foreach (var edge in cube.Edges)
+                var toUseCube = cube;
+                if (index.HasValue)
                 {
-                    if(edge==null)
-                    {
+                    toUseCube = cubes[index.Value];
+                }
 
-                    }
+                foreach (var edge in toUseCube.Edges)
+                {
                     if (!lines.Contains(edge))
                     {
                         lines.Add(edge);
                         modelToAdd.Children.Add(GetLine(edge.Point1, edge.Point2, Colors.Red));
                     }
                 }
+
+                if (index.HasValue)
+                {
+                    int indexName = 0;
+                    foreach (var vert in toUseCube.Vertex)
+                    {
+                        var model = new Petzold.Media3D.WireText() { Text = indexName.ToString(), };
+                        model.Origin = new Point3D(vert.X, vert.Y, vert.Z);
+                        model.FontSize = 1;
+                        modelToAdd.Children.Add(model);
+                        indexName++;
+                    }
+                    break;
+                }
             }
 
-
+            viewport.Children.Clear();
             viewport.Children.Add(modelToAdd);
+            return index;
+
+
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+
+            if (e.Key == Key.Right)
+            {
+                if (!currentCube.HasValue)
+                {
+                    currentCube = 0;
+                }
+                currentCube++;
+                currentCube = DrawGridLines(currentCube);
+            }
+            else if (e.Key == Key.Left)
+            {
+                if (!currentCube.HasValue)
+                {
+                    currentCube = 0;
+                }
+
+                currentCube--;
+                currentCube = DrawGridLines(currentCube);
+            }
+            else if (e.Key == Key.Enter)
+            {
+                currentCube = null;
+                currentCube = DrawGridLines(currentCube);
+            }
+
+            base.OnKeyDown(e);
+        }
         private WireLine GetLine(Arguments point1, Arguments point2, Color color)
         {
             var line = new WireLine();
