@@ -8,7 +8,7 @@ namespace MarchingCubes
    public class AxissConsts
     {
         public static int X { get; set; }
-        public static int Y { get; set; }
-        public static int Z { get; set; }
+        public static int Y { get; set; } = 1;
+        public static int Z { get; set; } = 2;
     }
 }

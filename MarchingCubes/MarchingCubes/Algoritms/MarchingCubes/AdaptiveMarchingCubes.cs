@@ -213,7 +213,7 @@ namespace MarchingCubes.Algoritms.CountorLines
                             edge = MergeEdge(prevXCube, 5, prevYCube, 3);
                             edge = edge == null ? new GridLine(new Arguments(x, nextYValue, z)/*4*/, new Arguments(x, nextYValue, nextZValue)/*7*/) : edge;
                             edges.Add(edge);
-                            
+
                             //8
                             edge = MergeEdge(prevXCube, 9, prevZCube, 11);
                             edge = edge == null ? new GridLine(new Arguments(x, y, z)/*0*/, new Arguments(x, nextYValue, z)/*4*/) : edge;
@@ -233,9 +233,9 @@ namespace MarchingCubes.Algoritms.CountorLines
                             edge = edge == null ? new GridLine(new Arguments(x, y, nextZValue)/*3*/, new Arguments(x, nextYValue, nextZValue)/*7*/) : edge;
                             edges.Add(edge);
 
-                          
+
                             newCube.Edges = edges.ToArray();
-                           
+
                             toReturn.Add(newCube);
 
                         }
@@ -258,121 +258,6 @@ namespace MarchingCubes.Algoritms.CountorLines
             }
 
             return toReturn;
-
-            ///// Front side = 0
-            ///// left 1, 
-            ///// bottom 2, 
-            ///// right 3 
-            ///// top 4
-            ///// back = 5
-            //var cubes = new List<GridCube>();
-
-            //GridRectangle[][] previous = null;
-            //GridLine[] tempLines = new GridLine[4];
-            ////create mesh
-            //bool drawZ = region.MinZ <= region.MinZ + region.Depth;
-            //for (var z = region.MinZ; drawZ; z = z + step)
-            //{
-            //    if (drawZ)
-            //    {
-            //        drawZ = z < region.MinZ + region.Depth;
-            //        if (!drawZ)
-            //        {
-            //            z = region.MaxZ;
-            //        }
-            //    }
-
-            //    if (previous == null)
-            //    {
-            //        previous = BuildGridLines(region, z, step);
-            //        //var ex = Object.ReferenceEquals(previous[0][0].RightLine, previous[0][1].LeftLine);
-            //        continue;
-            //    }
-
-            //    var rectangles = CloneRectanglesWithChangedZ(previous, z);
-            //    //create z lines
-            //    GridCube[][] currentCubes = new GridCube[rectangles.Length][];
-            //    if (rectangles.Length == 0)
-            //        break;
-            //    for (int y = 0; y < rectangles.Length; y++)
-            //    {
-            //        var rows = rectangles[y].Length;
-            //        currentCubes[y] = new GridCube[rows];
-            //        for (int x = 0; x < rows; x++)
-            //        {
-            //            var second = rectangles[y][x];
-
-            //            var first = previous[y][x];
-            //            if (x == 0 && y == 0)
-            //            {
-            //                // lefttop,righttop,leftbottom,rightbottom
-            //                tempLines[0] = new GridLine(first.Vertices[0], second.Vertices[0]);
-            //                tempLines[1] = new GridLine(first.Vertices[1], second.Vertices[1]);
-            //                tempLines[2] = new GridLine(first.Vertices[2], second.Vertices[2]);
-            //                tempLines[3] = new GridLine(first.Vertices[3], second.Vertices[3]);
-            //            }
-            //            else if (x == 0)//y!=0
-            //            {
-            //                var topRect = currentCubes[y - 1][x].Rectangles[(int)GridCubeSides.Top];
-            //                tempLines[0] = new GridLine(first.Vertices[0], second.Vertices[0]);
-            //                tempLines[1] = new GridLine(first.Vertices[1], second.Vertices[1]);
-            //                tempLines[2] = topRect.LeftLine;
-            //                tempLines[3] = topRect.RightLine;
-            //            }
-            //            else if (y == 0)//x!=0
-            //            {
-            //                var rightRect = currentCubes[y][x - 1].Rectangles[(int)GridCubeSides.Right];
-            //                tempLines[0] = rightRect.TopLine;//lefttop=right top
-            //                tempLines[1] = new GridLine(first.Vertices[1], second.Vertices[1]);
-            //                tempLines[2] = rightRect.BottomLine;//bottomleft=right bottom
-            //                tempLines[3] = new GridLine(first.Vertices[3], second.Vertices[3]);
-            //            }
-            //            else//x!=0 and y!=0 
-            //            {
-            //                var rightRect = currentCubes[y][x - 1].RightRectangle;
-            //                var topRect = currentCubes[y - 1][x].TopRectangle;
-            //                tempLines[0] = rightRect.TopLine;//lefttop=right top
-            //                tempLines[1] = new GridLine(first.Vertices[1], second.Vertices[1]);
-            //                tempLines[2] = topRect.LeftLine;
-            //                tempLines[3] = topRect.RightLine;
-            //            }
-
-            //            GridCube cube = new GridCube();
-            //            //Bug each line dublicated
-
-            //            cube.BackRectangle = first;
-            //            cube.FrontRectangle = second;
-
-
-            //            cube.TopRectangle = CreateCubeSide(tempLines[1], first.TopLine, tempLines[0], second.TopLine);
-
-            //            if (y == 0)
-            //                cube.BottomRectangle = CreateCubeSide(tempLines[3], first.BottomLine, tempLines[2], second.BottomLine);
-            //            else
-            //                cube.BottomRectangle = currentCubes[y - 1][x].TopRectangle;
-
-
-            //            cube.RightRectangle = CreateCubeSide(first.RightLine,
-            //                cube.TopRectangle.RightLine, second.RightLine,
-            //                cube.BottomRectangle.RightLine);
-
-            //            if (x == 0)
-            //                cube.LeftRectangle = CreateCubeSide(first.LeftLine,
-            //                    cube.TopRectangle.LeftLine, second.LeftLine, cube.BottomRectangle.LeftLine);
-            //            else
-            //                cube.LeftRectangle = currentCubes[y][x - 1].RightRectangle;
-
-
-
-            //            currentCubes[y][x] = cube;
-            //            cubes.Add(cube);
-            //        }
-            //    }
-            //    //create cubes
-            //    previous = rectangles;
-            //}
-            //this.cubes = cubes;
-            //return cubes;
         }
 
         private static GridLine MergeEdge(GridCube cube1,
