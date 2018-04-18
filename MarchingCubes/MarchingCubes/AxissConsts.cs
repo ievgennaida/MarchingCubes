@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MarchingCubes
 {
-   public class AxissConsts
+    public static class AxissConsts
     {
         public static int X { get; set; }
         public static int Y { get; set; } = 1;

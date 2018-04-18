@@ -4,34 +4,23 @@ using System.Linq;
 using System.Text;
 using MarchingCubes.CommonTypes;
 
-namespace MarchingCubes.Algoritms.CountorLines
+namespace MarchingCubes.Algoritms.MarchingCubes
 {
     public class GridLineCountorData
     {
         /// <summary>
-        /// for real value
+        /// Isolevel intersection
         /// </summary>
         public Arguments Minium { get; set; }
 
-        /// <summary>
-        /// for screen point
-        /// </summary>
-        public Arguments MiniumF { get; set; }
-
-        public bool IsFoundMinium
-        {
-            get
-            {
-                return Minium != null && MiniumF != null;
-            }
-        }
+        public bool IsFoundMinium { get; set; }
 
         /// <summary>
         /// Countor Line Value
         /// </summary>
-        public double Value { get; set; }
+        public double IsoLevel { get; set; }
 
-        public bool IsContainsCountorLine { get; set; }
+        public bool HasCountourLine { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -44,7 +33,7 @@ namespace MarchingCubes.Algoritms.CountorLines
             if (Object.ReferenceEquals(obj, this))
                 return true;
 
-            return objc.Value == this.Value;
+            return objc.IsoLevel == this.IsoLevel;
         }
         public static bool operator ==(GridLineCountorData r1, GridLineCountorData r2)
         {
@@ -75,7 +64,7 @@ namespace MarchingCubes.Algoritms.CountorLines
         {
             foreach (var item in this)
             {
-                if (item.Value == value)
+                if (item.IsoLevel == value)
                     return item;
             }
             return null;

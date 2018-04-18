@@ -1,24 +1,27 @@
 ﻿using MarchingCubes.CommonTypes;
 using System;
 using System.Collections.Generic;
-namespace MarchingCubes.Algoritms.CountorLines
+namespace MarchingCubes.Algoritms.MarchingCubes
 {
     public class GridCube
     {
         public GridCube()
         {
-            Vertex = new Arguments[8];
+            Vertex = new Point[8];
         }
 
-        public GridLine[] Edges { get; set; }
+        /// <summary>
+        /// Gets the collection of edges.
+        /// </summary>
+        public GridLine[] Edges { get; internal set; }
 
         /// <summary>
         /// Gets or sets the vertex. 
         /// </summary>
-        public Arguments[] Vertex { get; set; }
+        public Point[] Vertex { get; internal set; }
 
-   
         public int LastCubeIndex { get; set; }
+
         /// <summary>
         /// Get special index of cube isolevel for marching cubes algoritm
         /// </summary>
@@ -40,25 +43,6 @@ namespace MarchingCubes.Algoritms.CountorLines
         }
     }
 
-
-    public enum GridEdges
-    {
-        BackBottom = 0,
-        RightBottom = 1,
-        FrontBottom = 2,
-        LeftBottom = 3,
-
-        BackTop = 4,
-        RightTop = 5,
-        FrontTop = 6,
-        LeftTop = 7,
-
-        BackRight = 8,
-        BackLeft = 9,
-
-        FrontLeft = 10,
-        FrontRight = 11
-    }
 }
 
 

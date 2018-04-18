@@ -7,13 +7,8 @@ using System.Text;
 namespace MarchingCubes.CommonTypes
 {
     [DebuggerDisplay("P {X}{Y}{Z}")]
-    public class Point
+    public struct Point
     {
-        public Point()
-        {
-
-        }
-
         public Point(double x, double y, double z = 0)
         {
             this.X = x;
@@ -24,5 +19,19 @@ namespace MarchingCubes.CommonTypes
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
+
+        public override bool Equals(object ob)
+        {
+            if (ob is Point)
+            {
+                var c = (Point)ob;
+                var isEquals = X == c.X && Y == c.Y && Z == c.Z; ;
+                return isEquals;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

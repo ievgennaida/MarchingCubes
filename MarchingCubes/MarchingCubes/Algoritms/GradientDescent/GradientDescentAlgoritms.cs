@@ -6,21 +6,21 @@ namespace MarchingCubes.Algoritms.GradientDescent
     public class GradientDescentAlgoritm
     {
         protected Derivative derivation;
-        protected FunctionHolder function;
+        protected MarchingFunction function;
         public GradientDescentParams Parameters { get; set; }
 
-        public GradientDescentAlgoritm(FunctionHolder function) :
+        public GradientDescentAlgoritm(MarchingFunction function) :
             this(function, GradientDescentParams.DefaultParams(function.Dimension),
             new Derivative(function, DerivationAccuracy.High))
         {
         }
 
-        public GradientDescentAlgoritm(FunctionHolder function, GradientDescentParams parameters)
+        public GradientDescentAlgoritm(MarchingFunction function, GradientDescentParams parameters)
             : this(function, parameters, new Derivative(function, DerivationAccuracy.High))
         {
         }
 
-        public GradientDescentAlgoritm(FunctionHolder function, GradientDescentParams parameters, Derivative derivation)
+        public GradientDescentAlgoritm(MarchingFunction function, GradientDescentParams parameters, Derivative derivation)
         {
             this.function = function;
             this.Parameters = parameters;

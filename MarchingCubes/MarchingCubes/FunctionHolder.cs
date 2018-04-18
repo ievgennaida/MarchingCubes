@@ -10,12 +10,12 @@ namespace MarchingCubes
     {
     }
 
-    public class FunctionHolder //: ICloneable
+    public class MarchingFunction //: ICloneable
     {
         private int dimension;
         private Function function;
         private bool setFunction;
-        public FunctionHolder(Function function, int dimension)
+        public MarchingFunction(Function function, int dimension)
         {
             setFunction = true;
             this.function = function;
@@ -148,9 +148,9 @@ namespace MarchingCubes
             return CloneFunctionHolder();
         }
 
-        public FunctionHolder CloneFunctionHolder()
+        public MarchingFunction CloneFunctionHolder()
         {
-            return new FunctionHolder(function, dimension);
+            return new MarchingFunction(function, dimension);
         }
         #endregion
     }

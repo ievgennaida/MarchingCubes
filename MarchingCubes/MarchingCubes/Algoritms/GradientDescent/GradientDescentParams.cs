@@ -16,10 +16,10 @@ namespace MarchingCubes.Algoritms.GradientDescent
 
         public static GradientDescentParams DefaultParams(int dimension)
         {
-                return new GradientDescentParams()
-                {
-                    StartPoint = Arguments.CreateEmptyArgs(dimension)
-                };
+            return new GradientDescentParams()
+            {
+                StartPoint = Arguments.CreateEmptyArgs(dimension)
+            };
         }
     }
 }

@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Trackball\TrackballUtils.cs" />
     <Compile Include="Trackball\TrackMode.cs" />
+    <Compile Include="TrianglesConvertor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

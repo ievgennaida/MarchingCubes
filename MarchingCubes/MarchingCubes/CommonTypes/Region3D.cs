@@ -49,22 +49,22 @@ namespace MarchingCubes.CommonTypes
         /// <summary>
         /// Region Will Resized (will grow up) if empty
         /// </summary>
-        public void ExpandIfEmpty()
+        public void GrowIfEmpty()
         {
             if (Width == 0)
             {
                 MinX -= 1;
-                MaxX -= 1;
+                MaxX += 1;
             }
             if (Height == 0)
             {
                 MinY -= 1;
-                MaxY -= 1;
+                MaxY += 1;
             }
             if (Depth == 0)
             {
                 MinZ -= 1;
-                MaxZ -= 1;
+                MaxZ += 1;
             }
         }
 
@@ -94,7 +94,7 @@ namespace MarchingCubes.CommonTypes
                 if (Depth > Height)
                 {
                     var toAdd = (Depth - Height) / 2;
-                    this.MinY -= toAdd;//becouse they equals
+                    this.MinY -= toAdd;//because they are equals
                     this.MaxY += toAdd;
                     this.MinX -= toAdd;
                     this.MaxX += toAdd;

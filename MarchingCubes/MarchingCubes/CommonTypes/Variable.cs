@@ -8,7 +8,7 @@ namespace MarchingCubes.CommonTypes
         {
         }
 
-        public Variable(String name, double value)
+        public Variable(string name, double value)
         {
             this.Name = name;
             this.Value = value;

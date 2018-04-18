@@ -1,22 +1,13 @@
-﻿using MarchingCubes.Algoritms.CountorLines;
+﻿using MarchingCubes.Algoritms.MarchingCubes;
 using MarchingCubes.CommonTypes;
 using MarchingCubesDemo.WPF.Trackball;
 using Petzold.Media3D;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MarchingCubesDemo.WPF
 {
@@ -57,7 +48,7 @@ namespace MarchingCubesDemo.WPF
             var modelToAdd = new ModelVisual3D();
             var size = 15;
             var step = 5;
-            var marchingCubes = new MarchingCubes.Algoritms.CountorLines.MarchingCubes(null);
+            var marchingCubes = new MarchingCubes.Algoritms.MarchingCubes.MarchingCubesAlgorithm(null);
             var region = new Region3D(0, size, 0, size, 0, size);
             var cubes = marchingCubes.BuildGrid(region, step);
 
@@ -76,6 +67,8 @@ namespace MarchingCubesDemo.WPF
                 }
             }
 
+            var unique = new List<Point>();
+            int globalIndex = 0;
             foreach (var cube in cubes)
             {
                 var toUseCube = cube;
@@ -89,7 +82,19 @@ namespace MarchingCubesDemo.WPF
                     if (!lines.Contains(edge))
                     {
                         lines.Add(edge);
-                        modelToAdd.Children.Add(GetLine(edge.Point1, edge.Point2, Colors.Red));
+                        //modelToAdd.Children.Add(GetLine(edge.Point1, edge.Point2, Colors.Red));
+                    }
+                }
+
+                foreach (var vert in toUseCube.Vertex)
+                {
+                    if (!unique.Contains(vert))
+                    {
+                        var model = new Petzold.Media3D.WireText() { Text = globalIndex.ToString(), };
+                        model.Origin = new Point3D(vert.X, vert.Y, vert.Z);
+                        model.FontSize = 1;
+                        modelToAdd.Children.Add(model);
+                        globalIndex++;
                     }
                 }
 
@@ -117,7 +122,6 @@ namespace MarchingCubesDemo.WPF
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-
             if (e.Key == Key.Right)
             {
                 if (!currentCube.HasValue)
@@ -145,6 +149,7 @@ namespace MarchingCubesDemo.WPF
 
             base.OnKeyDown(e);
         }
+
         private WireLine GetLine(Arguments point1, Arguments point2, Color color)
         {
             var line = new WireLine();

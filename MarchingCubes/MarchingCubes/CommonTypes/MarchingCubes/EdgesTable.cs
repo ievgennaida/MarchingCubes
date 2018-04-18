@@ -6,24 +6,18 @@ using MarchingCubes.CommonTypes;
 
 namespace MarchingCubes.Algoritms.CountorLines
 {
-    public class GridTriangle 
-    {
-        public Arguments Point1 { get; set; }
-        public Arguments Point2 { get; set; }
-        public Arguments Point3 { get; set; }
-        public Boolean IsInvalid { get { return (Point1 == null || Point2 == null || Point3 == null); } }
-    }
     /// <summary>
     /// The marching cubes.
     /// It's used to build trianges based on the table data. 
     /// Values will indicate which points should be connected.
     /// </summary>
-    public static class EdgeTable
+    public static class EdgesTable
     {
         public static int[,] Table;
-        static EdgeTable()
+        static EdgesTable()
         {
-            Table = new int[256,16]{
+            Table = new int[256, 16]
+            {
 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 {0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -282,7 +276,5 @@ namespace MarchingCubes.Algoritms.CountorLines
 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
    };
         }
-
-
     }
 }

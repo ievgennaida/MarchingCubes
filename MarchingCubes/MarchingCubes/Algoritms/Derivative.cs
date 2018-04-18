@@ -4,20 +4,20 @@ using MarchingCubes.CommonTypes;
 namespace MarchingCubes.Algoritms
 {
     /// <summary>
-    /// Чисельне знаходження значення похідної в точці
+    /// The derivative of a function of a real variable measures the sensitivity to change of the function value (output value) with respect to a change in its argument (input value). 
     /// </summary>
     public class Derivative
     {
         private DerivationAccuracy accurracy;
-        private FunctionHolder function;
+        private MarchingFunction function;
         private double h;
 
-        public Derivative(FunctionHolder function)
+        public Derivative(MarchingFunction function)
             : this(function, DerivationAccuracy.Normal)
         {
         }
 
-        public Derivative(FunctionHolder function, DerivationAccuracy accurracy)
+        public Derivative(MarchingFunction function, DerivationAccuracy accurracy)
         {
             this.function = function.CloneFunctionHolder();
             this.accurracy = accurracy;

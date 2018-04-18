@@ -3,11 +3,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MarchingCubes.Algoritms.CountorLines;
 using System.Collections.Generic;
 using System.Linq;
+using MarchingCubes.Algoritms.MarchingCubes;
+using MarchingCubes.CommonTypes;
 
 namespace MarchingCubes.Test
 {
     [TestClass]
-    public class TestGrid
+    public class TestGridGeneration
     {
         [TestMethod]
         public void CheckOneCube()
@@ -45,12 +47,13 @@ namespace MarchingCubes.Test
             var edjesCount = vertexPerSide * uniqueEdgesPerSide + (vertexPerSide * vertexPerSide * edgesPerSide);
 
 
-            var marchingCubes = new Algoritms.CountorLines.MarchingCubes(null);
+            var marchingCubes = new MarchingCubesAlgorithm(null);
             var region = new CommonTypes.Region3D(0, size, 0, size- step- step, 0, size);
             var cubes = marchingCubes.BuildGrid(region, step);
 
             Assert.AreEqual(cubes.Count, countOfCubes);
 
+            var uniqueVertexes = new List<Point>();
             // 18 unique edges
             var lines = new List<GridLine>();
             foreach (var cube in cubes)
@@ -62,7 +65,17 @@ namespace MarchingCubes.Test
                         lines.Add(edge);
                     }
                 }
+
+                foreach (var vert in cube.Vertex)
+                {
+                    if (!uniqueVertexes.Contains(vert))
+                    {
+                        uniqueVertexes.Add(vert);
+                    }
+                }
             }
+
+            Assert.AreEqual(uniqueVertexes.Count, edjesCount);
 
             Assert.AreEqual(lines.Count, edjesCount);
 

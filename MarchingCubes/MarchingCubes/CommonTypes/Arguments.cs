@@ -11,6 +11,11 @@ namespace MarchingCubes.CommonTypes
     [DebuggerDisplay("P {X},{Y},{Z}")]
     public class Arguments : List<Variable>
     {
+        public Arguments()
+        {
+
+        }
+
         public Arguments(double x, double y, double z = 0)
             : base(new Variable[] 
             { 
@@ -31,10 +36,10 @@ namespace MarchingCubes.CommonTypes
             SetNames(this);
         }
 
-        public Arguments()
-        {
-
-        }
+        /// <summary>
+        /// Gets the calculated value for a current arguments set.
+        /// </summary>
+        public double? CalculatedValue { get; internal set; }
 
         public void Revert()
         {
@@ -107,12 +112,14 @@ namespace MarchingCubes.CommonTypes
             {
                 toRet.Add(item.CloneVariable());
             }
+
+            toRet.CalculatedValue = this.CalculatedValue;
             return toRet;
         }
 
         public static Arguments operator +(Arguments args, double h)
         {
-            Arguments toReturn = args.CloneArguments();
+            var toReturn = args.CloneArguments();
             foreach (var temp in toReturn)
             {
                 if (!temp.IsConstant)
@@ -279,27 +286,27 @@ namespace MarchingCubes.CommonTypes
             return toReturn;
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj == null)
+        //        return false;
 
-            if (obj.GetType() != this.GetType())
-                return false;
+        //    if (obj.GetType() != this.GetType())
+        //        return false;
 
-            Arguments arg = (Arguments)obj;
+        //    Arguments arg = (Arguments)obj;
 
-            if (arg.Count != this.Count)
-                return false;
+        //    if (arg.Count != this.Count)
+        //        return false;
 
-            for (int i = 0; i < this.Count; i++)
-            {
-                if (!arg[i].Equals(this[i]))
-                    return false;
-            }
+        //    for (int i = 0; i < this.Count; i++)
+        //    {
+        //        if (!arg[i].Equals(this[i]))
+        //            return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         /*hell, only for marching cubes algoritm*/
         public Point NormalVector { get; set; }
