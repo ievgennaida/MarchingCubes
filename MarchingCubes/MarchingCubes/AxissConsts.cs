@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MarchingCubes
+﻿namespace MarchingCubes
 {
     public static class AxissConsts
     {
-        public static int X { get; set; }
-        public static int Y { get; set; } = 1;
-        public static int Z { get; set; } = 2;
+        public static readonly int X = 0;
+        public static readonly int Y = 1;
+        public static readonly int Z = 2;
     }
 }

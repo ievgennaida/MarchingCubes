@@ -58,7 +58,14 @@
     </ApplicationDefinition>
     <Compile Include="Trackball\TrackballUtils.cs" />
     <Compile Include="Trackball\TrackMode.cs" />
-    <Compile Include="TrianglesConvertor.cs" />
+    <Compile Include="ModelConverter.cs" />
+    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Base\CollectionViewModel.cs" />
+    <Compile Include="ViewModels\FunctionData.cs" />
+    <Compile Include="ViewModels\FunctionsListViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\RendererViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,6 +104,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cubesMask.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="3DWork\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarchingCubes\MarchingCubes.csproj">

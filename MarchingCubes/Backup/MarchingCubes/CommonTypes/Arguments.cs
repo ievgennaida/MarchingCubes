@@ -9,15 +9,9 @@ using System.Linq;
 namespace MarchingCubes.CommonTypes
 {
     [DebuggerDisplay("P {X},{Y},{Z}")]
-    public class Arguments : List<Variable> , IEquatable<Arguments>
+    public class Arguments : List<Variable>
     {
         public Arguments()
-        {
-
-        }
-
-        public Arguments(Point a) :
-            this(a.X, a.Y, a.Z)
         {
 
         }
@@ -202,6 +196,20 @@ namespace MarchingCubes.CommonTypes
             return toReturn;
         }
 
+        public static Arguments CreateEmptyArgs(int dimension)
+        {
+            Arguments args = new Arguments();
+            for (int i = 0; i < dimension; i++)
+            {
+                args.Add(0);
+            }
+            SetNames(args);
+            return args;
+        }
+        public void SetNames()
+        {
+            Arguments.SetNames(this);
+        }
         public static void SetNames(Arguments args)
         {
             if (args.Count > AxissConsts.X)
@@ -269,7 +277,7 @@ namespace MarchingCubes.CommonTypes
 
         public List<Variable> ConvertToVariables()
         {
-            var toReturn = new List<Variable>();
+            List<Variable> toReturn = new List<Variable>();
             foreach (var temp in this)
             {
                 toReturn.Add(temp);
@@ -278,37 +286,27 @@ namespace MarchingCubes.CommonTypes
             return toReturn;
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj == null)
+        //        return false;
 
-            if (obj.GetType() != this.GetType())
-                return false;
+        //    if (obj.GetType() != this.GetType())
+        //        return false;
 
-            if (object.ReferenceEquals(obj, this))
-            {
-                return true;
-            }
+        //    Arguments arg = (Arguments)obj;
 
-            var arg = (Arguments)obj;
+        //    if (arg.Count != this.Count)
+        //        return false;
 
-            if (arg.Count != this.Count)
-                return false;
+        //    for (int i = 0; i < this.Count; i++)
+        //    {
+        //        if (!arg[i].Equals(this[i]))
+        //            return false;
+        //    }
 
-            for (int i = 0; i < this.Count; i++)
-            {
-                if (!arg[i].Equals(this[i]))
-                    return false;
-            }
-
-            return true;
-        }
-
-        public bool Equals(Arguments other)
-        {
-            return Equals((object)other);
-        }
+        //    return true;
+        //}
 
         /*hell, only for marching cubes algoritm*/
         public Point NormalVector { get; set; }

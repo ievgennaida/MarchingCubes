@@ -1,5 +1,7 @@
-﻿using MarchingCubes.CommonTypes;
-using System;
+﻿using System;
+using MarchingCubes.CommonTypes;
+using MarchingCubes.GraphicTypes;
+using MarchingCubes.Algoritms;
 
 namespace MarchingCubes.Algoritms
 {
@@ -7,7 +9,7 @@ namespace MarchingCubes.Algoritms
     /// The golden-section search is a technique for finding the extremum (minimum or maximum) 
     /// of a strictly unimodal function by successively narrowing the range of values inside which the extremum is known to exist. 
     /// </summary>
-    public class GoldenSectionSearch : IinterpolationAlgoritm
+    public class GoldenSectionSearch : INterpolationAlgoritm
     {
         protected MarchingFunction function;
         protected double accuracyEpsilon;
@@ -17,31 +19,13 @@ namespace MarchingCubes.Algoritms
             this.accuracyEpsilon = accuracyEpsilon;
         }
 
-        private double? Calc(Point point)
-        {
-            if(function==null)
-            {
-                return null;
-            }
-
-            try
-            {
-               var toReturn =  function(point);
-                return toReturn;
-            }
-            catch(Exception ex)
-            {
-                return null;
-            }
-        }
-
         /// <summary>
         /// Find the nearest point.
         /// </summary>
-        public Point Interpolate(Point start, Point finish, int axissIndex, double? isolevel = null)
+        public Arguments Interpolate(Arguments start, Arguments finish, int axissIndex, double? isolevel=null)
         {
-            var startValue = start.Get(axissIndex) > finish.Get(axissIndex) ? finish.Get(axissIndex) : start.Get(axissIndex);
-            var finishValue = start.Get(axissIndex) > finish.Get(axissIndex) ? start.Get(axissIndex) : finish.Get(axissIndex);
+            var startValue = start[axissIndex].Value > finish[axissIndex].Value ? finish[axissIndex].Value : start[axissIndex].Value;
+            var finishValue = start[axissIndex].Value > finish[axissIndex].Value ? start[axissIndex].Value : finish[axissIndex].Value;
             var curA = startValue;
             var curB = finishValue;
             double funcA = 0;
@@ -49,78 +33,46 @@ namespace MarchingCubes.Algoritms
             double calcA = 0;
             double calcB = 0;
 
-            var point = start.Clone();
+            var point = start.CloneArguments();
             // Some constants
             var c = (3 - Math.Sqrt(5)) / 2;
-            var fi = (Math.Sqrt(5) + 1) / 2;
+            var fi = (Math.Sqrt(5) + 1) / 2; 
             var calculated = Calculated.FirstIteration;
             for (; ; )
             {
                 if ((curB - curA < accuracyEpsilon) && calculated != Calculated.FirstIteration)
                 {
-                    var pointToReturn = point.Clone();
+                    var pointToReturn = point.CloneArguments();
                     if (GetNearestOrMin(funcA, funcB, isolevel))
                     {
-                        pointToReturn.Set(axissIndex, curA);
+                        pointToReturn[axissIndex] = curA;
                     }
                     else
                     {
-                        pointToReturn.Set(axissIndex, curB);
+                        pointToReturn[axissIndex] = curB;
                     }
 
                     return pointToReturn;
                 }
 
                 calcA = curA + c * (curB - curA);
-                point.Set(axissIndex, calcA);
+                point[axissIndex] = calcA;
+                funcA = function.Calculate(point);
 
-                var toSet = Calc(point);
                 calcB = curA + (1 - c) * (curB - curA);
-                point.Set(axissIndex, calcB);
-
-                var toSet2 = Calc(point);
-
-                if (toSet.HasValue)
-                {
-                    funcA = toSet.Value;
-                }
-
-                if (toSet2.HasValue)
-                {
-                    funcB = toSet2.Value;
-                }
-
-            
-                var forcedExit = false;
-                if (!toSet.HasValue || !toSet2.HasValue)
-                {
-                    // Cannot calculate the value. Get the nearest value and exit.
-                    forcedExit = true;
-                }
+                point[axissIndex] = calcB;
+                funcB = function.Calculate(point);
 
                 var result = GetNearestOrMin(funcA, funcB, isolevel);
 
                 if (result)
                 {
                     curB = calcB;
-
-                    // This will exit from the function.
-                    if(forcedExit)
-                    {
-                        curA = curB;
-                    }
-
                     calculated = Calculated.B;
                 }
                 else
                 {
                     curA = calcA;
-
-                    if (forcedExit)
-                    {
-                        curB = curA;
-                    }
-
                     calculated = Calculated.A;
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarchingCubes.GraphicTypes;
+using System;
 
 namespace MarchingCubes.CommonTypes
 {

@@ -14,28 +14,37 @@ namespace MarchingCubes.Test
         [TestMethod]
         public void CheckOneCube()
         {
-            var size = 10;
-            var gridSize = 10;
-            Сheck(size, gridSize);
+            var size = 10f;
+            var gridSize = 10f;
+            Сheck(0f, size, gridSize);
         }
+        //  Step = 0.3,
+        //        Region = new Region3D(-1.5, 1.5, -1.5, 1.5, -1.5, 1.5),
 
         [TestMethod]
         public void Check8Cubes()
         {
-            var size = 10;
-            var gridSize = 5;
-            Сheck(size, gridSize);
+            var size = 10f;
+            var gridSize = 5f;
+            Сheck(0f, size, gridSize);
+        }
+
+        [TestMethod]
+        public void CheckCubesBroken()
+        {
+            var gridSize = 1f;
+            Сheck(-1.5, 1.5, gridSize);
         }
 
         [TestMethod]
         public void Check27Cubes()
         {
-            var size = 15;
-            var gridSize = 5;
-            Сheck(size, gridSize);
+            var size = 15f;
+            var gridSize = 5f;
+            Сheck(0, size, gridSize);
         }
 
-        public List<GridCube> Сheck(int size, int step)
+        public List<GridCube> Сheck(double fromSize, double size, double step)
         {
             var edgesPerSide = size / step;
             var countOfCubes = Math.Pow(edgesPerSide, 3);
@@ -48,7 +57,7 @@ namespace MarchingCubes.Test
 
 
             var marchingCubes = new MarchingCubesAlgorithm(null);
-            var region = new CommonTypes.Region3D(0, size, 0, size- step- step, 0, size);
+            var region = new CommonTypes.Region3D(0, size, 0, size, 0, size);
             var cubes = marchingCubes.BuildGrid(region, step);
 
             Assert.AreEqual(cubes.Count, countOfCubes);
@@ -68,14 +77,17 @@ namespace MarchingCubes.Test
 
                 foreach (var vert in cube.Vertex)
                 {
-                    if (!uniqueVertexes.Contains(vert))
+                    // Check that objects are not created. Exclude overriden values.
+                    //if (!uniqueVertexes.Any(p => object.ReferenceEquals(uniqueVertexes, vert)))
+                    if(!uniqueVertexes.Contains(vert))
                     {
                         uniqueVertexes.Add(vert);
                     }
                 }
             }
 
-            Assert.AreEqual(uniqueVertexes.Count, edjesCount);
+            var totalVertexes = vertexPerSide * vertexPerSide * vertexPerSide;
+            Assert.AreEqual(uniqueVertexes.Count, totalVertexes);
 
             Assert.AreEqual(lines.Count, edjesCount);
 
@@ -87,17 +99,17 @@ namespace MarchingCubes.Test
             return cubes;
         }
 
-        private static void CheckVertexes(GridCube cube, int start, int end)
+        private static void CheckVertexes(GridCube cube, double start, double end)
         {
-            Assert.AreEqual(cube.Vertex[0], new CommonTypes.Arguments(start, start, start));
-            Assert.AreEqual(cube.Vertex[1], new CommonTypes.Arguments(end, start, start));
-            Assert.AreEqual(cube.Vertex[2], new CommonTypes.Arguments(end, start, end));
-            Assert.AreEqual(cube.Vertex[3], new CommonTypes.Arguments(start, start, end));
+            Assert.AreEqual(cube.Vertex[0], new CommonTypes.Point(start, start, start));
+            Assert.AreEqual(cube.Vertex[1], new CommonTypes.Point(end, start, start));
+            Assert.AreEqual(cube.Vertex[2], new CommonTypes.Point(end, start, end));
+            Assert.AreEqual(cube.Vertex[3], new CommonTypes.Point(start, start, end));
 
-            Assert.AreEqual(cube.Vertex[4], new CommonTypes.Arguments(start, end, start));
-            Assert.AreEqual(cube.Vertex[5], new CommonTypes.Arguments(end, end, start));
-            Assert.AreEqual(cube.Vertex[6], new CommonTypes.Arguments(end, end, end));
-            Assert.AreEqual(cube.Vertex[7], new CommonTypes.Arguments(start, end, end));
+            Assert.AreEqual(cube.Vertex[4], new CommonTypes.Point(start, end, start));
+            Assert.AreEqual(cube.Vertex[5], new CommonTypes.Point(end, end, start));
+            Assert.AreEqual(cube.Vertex[6], new CommonTypes.Point(end, end, end));
+            Assert.AreEqual(cube.Vertex[7], new CommonTypes.Point(start, end, end));
         }
     }
 }

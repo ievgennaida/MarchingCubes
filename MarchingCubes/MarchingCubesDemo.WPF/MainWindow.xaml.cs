@@ -1,4 +1,5 @@
-﻿using MarchingCubes.Algoritms.MarchingCubes;
+﻿using GradientDescentWPF.ViewModels;
+using MarchingCubes.Algoritms.MarchingCubes;
 using MarchingCubes.CommonTypes;
 using MarchingCubesDemo.WPF.Trackball;
 using Petzold.Media3D;
@@ -17,147 +18,109 @@ namespace MarchingCubesDemo.WPF
     public partial class MainWindow : Window
     {
         private TrackballUtils trackball = new TrackballUtils();
+        private MainWindowViewModel context;
         public MainWindow()
         {
             InitializeComponent();
-            DrawGridLines(currentCube);
-
 
             this.Camera.Transform = trackball.Transform;
-            this.Camera.NearPlaneDistance = 0;
-            this.Camera.Width = 4;
-
-            this.Loaded += OnLoaded;
-            //           graph3DContainer = new Graph3DContainer(Viewport);
-            // listBoxPresenter = new CountorLineListBoxPresenter(tbCounturValue, lbContourLinesList);
             this.Headlight.Transform = trackball.Transform;
-        }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
             // Viewport3Ds only raise events when the mouse is over the rendered 3D geometry.
             // In order to capture events whenever the mouse is over the client are we use a
             // same sized transparent Border positioned on top of the Viewport3D.
             trackball.EventSource = container;
             trackball.Camera = this.Camera;
+
+            this.DataContext = context = new MainWindowViewModel();
+            context.Initialize(trackball,viewport);
+            //           graph3DContainer = new Graph3DContainer(Viewport);
+            // listBoxPresenter = new CountorLineListBoxPresenter(tbCounturValue, lbContourLinesList);
+
         }
 
-        int? currentCube = null;
-        private int? DrawGridLines(int? index)
+       
+        private void WindowMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var modelToAdd = new ModelVisual3D();
-            var size = 15;
-            var step = 5;
-            var marchingCubes = new MarchingCubes.Algoritms.MarchingCubes.MarchingCubesAlgorithm(null);
-            var region = new Region3D(0, size, 0, size, 0, size);
-            var cubes = marchingCubes.BuildGrid(region, step);
-
-            var lines = new List<GridLine>();
-            //foreach (var cube in cubes)
-
-            if (index.HasValue)
+            var position = e.GetPosition(this);
+           // if (position.Y < 70 && position.Y != 0)
             {
-                if (index <= 0)
+                if (e.ChangedButton == MouseButton.Left && e.LeftButton == MouseButtonState.Pressed)
                 {
-                    index = 0;
-                }
-                else if (cubes.Count <= index)
-                {
-                    index = 0;
+                    DragMove();
                 }
             }
 
-            var unique = new List<Point>();
-            int globalIndex = 0;
-            foreach (var cube in cubes)
-            {
-                var toUseCube = cube;
-                if (index.HasValue)
-                {
-                    toUseCube = cubes[index.Value];
-                }
-
-                foreach (var edge in toUseCube.Edges)
-                {
-                    if (!lines.Contains(edge))
-                    {
-                        lines.Add(edge);
-                        //modelToAdd.Children.Add(GetLine(edge.Point1, edge.Point2, Colors.Red));
-                    }
-                }
-
-                foreach (var vert in toUseCube.Vertex)
-                {
-                    if (!unique.Contains(vert))
-                    {
-                        var model = new Petzold.Media3D.WireText() { Text = globalIndex.ToString(), };
-                        model.Origin = new Point3D(vert.X, vert.Y, vert.Z);
-                        model.FontSize = 1;
-                        modelToAdd.Children.Add(model);
-                        globalIndex++;
-                    }
-                }
-
-                if (index.HasValue)
-                {
-                    int indexName = 0;
-                    foreach (var vert in toUseCube.Vertex)
-                    {
-                        var model = new Petzold.Media3D.WireText() { Text = indexName.ToString(), };
-                        model.Origin = new Point3D(vert.X, vert.Y, vert.Z);
-                        model.FontSize = 1;
-                        modelToAdd.Children.Add(model);
-                        indexName++;
-                    }
-                    break;
-                }
-            }
-
-            viewport.Children.Clear();
-            viewport.Children.Add(modelToAdd);
-            return index;
-
-
+            base.OnMouseDown(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Right)
-            {
-                if (!currentCube.HasValue)
-                {
-                    currentCube = 0;
-                }
-                currentCube++;
-                currentCube = DrawGridLines(currentCube);
-            }
-            else if (e.Key == Key.Left)
-            {
-                if (!currentCube.HasValue)
-                {
-                    currentCube = 0;
-                }
+            //{
+            //    if (!currentCube.HasValue)
+            //    {
+            //        currentCube = 0;
+            //    }
+            //    currentCube++;
+            //    //currentCube = DrawGridLines(currentCube);
+            //}
+            //else if (e.Key == Key.Left)
+            //{
+            //    if (!currentCube.HasValue)
+            //    {
+            //        currentCube = 0;
+            //    }
 
-                currentCube--;
-                currentCube = DrawGridLines(currentCube);
-            }
-            else if (e.Key == Key.Enter)
-            {
-                currentCube = null;
-                currentCube = DrawGridLines(currentCube);
-            }
+            //    currentCube--;
+            // //   currentCube = DrawGridLines(currentCube);
+            //}
+            //else if (e.Key == Key.Enter)
+            //{
+            //    currentCube = null;
+            // //   currentCube = DrawGridLines(currentCube);
+            //}
 
             base.OnKeyDown(e);
         }
 
-        private WireLine GetLine(Arguments point1, Arguments point2, Color color)
+
+
+        private void btnMinimazeClick(object sender, RoutedEventArgs e)
         {
-            var line = new WireLine();
-            line.Point1 = new Point3D(point1.X, point1.Y, point1.Z);
-            line.Point2 = new Point3D(point2.X, point2.Y, point2.Z);
-            line.Thickness = 1;
-            line.Color = color;
-            return line;
+            WindowState = WindowState.Minimized;
+        }
+
+        private void btnExitClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var position = e.GetPosition(this);
+            if (position.Y < 40 && position.Y != 0)
+            {
+                if (WindowState == WindowState.Normal)
+                {
+                    WindowState = WindowState.Maximized;
+                }
+                else if (WindowState == WindowState.Maximized)
+                {
+                    WindowState = WindowState.Normal;
+                }
+            }
+        }
+
+        double deltaZoom = 5;
+        private void ZoomInClick(object sender, RoutedEventArgs e)
+        {
+            trackball.Zoom(deltaZoom);
+        }
+
+        private void ZoomOutClick(object sender, RoutedEventArgs e)
+        {
+            trackball.Zoom(-1 * deltaZoom);
         }
     }
 }

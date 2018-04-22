@@ -1,8 +1,4 @@
-﻿using MarchingCubes.Algoritms.CountorLines;
-using MarchingCubes.GraphicTypes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MarchingCubes.Algoritms.MarchingCubes
 {
@@ -10,24 +6,12 @@ namespace MarchingCubes.Algoritms.MarchingCubes
     {
         public MarchingCubesResults()
         {
-            Triangles = new List<Triangle>();
+            this.Triangles = new List<Triangle>();
+            this.Grid = new List<GridCube>();
         }
 
-        public double Value { get; set; }
-        public List<Triangle> Triangles { get; set; }
-
-        public List<Line> GetWiredResults()
-        {
-            var wires = new List<Line>();
-            foreach (var triangle in Triangles)
-            {
-                if (triangle.IsInvalid)
-                    continue;
-                //wires.Add(new Line(triangle.Point1, triangle.Point2));
-                //wires.Add(new Line(triangle.Point2, triangle.Point3));
-                //wires.Add(new Line(triangle.Point3, triangle.Point1));
-            }
-            return wires;
-        }
+        public List<GridCube> Grid { get; internal set; }
+        public double Iso { get; set; }
+        public List<Triangle> Triangles { get; internal set; }
     }
 }

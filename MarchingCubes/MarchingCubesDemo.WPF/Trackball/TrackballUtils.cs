@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Media.Media3D;
 using System.Windows;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace MarchingCubesDemo.WPF.Trackball
 {
@@ -60,6 +61,7 @@ namespace MarchingCubesDemo.WPF.Trackball
             _transform.Children.Add(_scale);
             _transform.Children.Add(new RotateTransform3D(_rotation));
             _transform.Children.Add(_translate);
+            this.PanMode = true;
         }
 
         /// <summary>
@@ -90,6 +92,7 @@ namespace MarchingCubesDemo.WPF.Trackball
                     _eventSource.MouseUp -= this.OnMouseUp;
                     _eventSource.MouseWheel -= _eventSource_MouseWheel;
                     _eventSource.MouseMove -= this.OnMouseMove;
+                    Mouse.Capture(_eventSource, CaptureMode.None);
                 }
 
                 _eventSource = value;
@@ -106,30 +109,52 @@ namespace MarchingCubesDemo.WPF.Trackball
             //Zoom(e.Delta);
         }
 
+        // Fix bug with a click.
+        private bool isFirstEvent = true;
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            Mouse.Capture(EventSource, CaptureMode.Element);
-            _previousPosition2D = e.GetPosition(EventSource);
-            _previousPosition3D = ProjectToTrackball(
-                EventSource.ActualWidth,
-                EventSource.ActualHeight,
-                _previousPosition2D);
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                isFirstEvent = true;
+                Mouse.Capture(EventSource, CaptureMode.Element);
+                _previousPosition2D = e.GetPosition(EventSource);
+                _previousPosition3D = ProjectToTrackball(
+                    EventSource.ActualWidth,
+                    EventSource.ActualHeight,
+                    _previousPosition2D);
+            }
         }
+
+
+        public bool PanMode { get; set; }
+
+        public bool FreeLookupMode { get; set; }
 
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            Mouse.Capture(EventSource, CaptureMode.None);
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                isFirstEvent = false;
+                Mouse.Capture(EventSource, CaptureMode.None);
+            }
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
+            // Fixed bug with flickering. First move cannot be outside of bounds.
             Point currentPosition = e.GetPosition(EventSource);
+            if (isFirstEvent && (currentPosition.X < 0 || currentPosition.Y < 0))
+            {
+                isFirstEvent = false;
+                return;
+            }
 
-            if (e.LeftButton == MouseButtonState.Pressed && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
+            isFirstEvent = false;
+            if (e.LeftButton == MouseButtonState.Pressed && ( (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) )|| FreeLookupMode))
             {
                 Look(currentPosition);
             }
-            else if (e.LeftButton == MouseButtonState.Pressed)
+            else if (e.LeftButton == MouseButtonState.Pressed && PanMode)
             {
                 Pan(currentPosition);
             }
@@ -158,6 +183,7 @@ namespace MarchingCubesDemo.WPF.Trackball
                 _previousPosition3D = currentPosition3D;
                 return;
             }
+
             Quaternion delta = new Quaternion(axis, -angle);
 
             // Get the current orientantion from the RotateTransform3D
@@ -190,21 +216,21 @@ namespace MarchingCubesDemo.WPF.Trackball
 
         private Vector3D ProjectToTrackball(double width, double height, Point point)
         {
-            double x = point.X / (width / 2);    // Scale so bounds map to [0,0] - [2,2]
-            double y = point.Y / (height / 2);
+            var x = point.X / (width / 2);    // Scale so bounds map to [0,0] - [2,2]
+            var y = point.Y / (height / 2);
 
             x = x - 1;                           // Translate 0,0 to the center
             y = 1 - y;                           // Flip so +Y is up instead of down
 
-            double z2 = 1 - x * x - y * y;       // z^2 = 1 - x^2 - y^2
-            double z = z2 > 0 ? Math.Sqrt(z2) : 0;
+            var z2 = 1 - x * x - y * y;       // z^2 = 1 - x^2 - y^2
+            var z = z2 > 0 ? Math.Sqrt(z2) : 0;
 
             return new Vector3D(x, y, z);
         }
 
         public void Zoom(Point currentPosition)
         {
-            double yDelta = currentPosition.Y - _previousPosition2D.Y;
+            var yDelta = currentPosition.Y - _previousPosition2D.Y;
             Zoom(yDelta);
         }
 
