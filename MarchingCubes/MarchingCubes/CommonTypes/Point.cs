@@ -22,6 +22,7 @@ namespace MarchingCubes.CommonTypes
         public double Y { get; set; }
         public double Z { get; set; }
 
+
         public double? CalculatedValue { get; set; }
         public double Get(int index)
         {
@@ -37,6 +38,20 @@ namespace MarchingCubes.CommonTypes
             {
                 return Z;
             }
+        }
+
+        public Point NormalVector { get; set; }
+
+        public void AddAndMergeNormal(Point p)
+        {
+            if (this.NormalVector == null)
+            {
+                this.NormalVector = new Point();
+            }
+
+            this.NormalVector.X += p.X;
+            this.NormalVector.Y += p.Y;
+            this.NormalVector.Z += p.Z;
         }
 
         public void Set(int index, double value)
@@ -62,6 +77,7 @@ namespace MarchingCubes.CommonTypes
                 CalculatedValue = CalculatedValue
             };
         }
+
         public override bool Equals(object obj)
         {
             if (obj == null)

@@ -212,19 +212,14 @@ namespace MarchingCubes.Algoritms.MarchingCubes
                 var vertex2 = edjes[EdgesTable.Table[index, i + 1]];
                 var vertex3 = edjes[EdgesTable.Table[index, i + 2]];
 
-                var triangle = new Triangle()
-                {
-                    Point1 = vertex1.IsoPoint,
-                    Point2 = vertex2.IsoPoint,
-                    Point3 = vertex3.IsoPoint
-                };
-
+                var triangle = new Triangle(vertex1.IsoPoint, vertex2.IsoPoint, vertex3.IsoPoint);
+                var normalVector = triangle.GetNormal();
+                // All triangle points are merged togeher (Triangles share vertexes). 
+                // This is used to show smooth model.
+                triangle.Point1.AddAndMergeNormal(normalVector);
+                triangle.Point2.AddAndMergeNormal(normalVector);
+                triangle.Point3.AddAndMergeNormal(normalVector);
                 toReturn.Add(triangle);
-                //if (!triangle.IsInvalid)
-                //{
-                //    //  var normal = VectorHelper.CalcNormal(triangle);
-                //    //  VectorHelper.AddNormals(triangle, normal);
-                //}
             }
 
             return toReturn;
@@ -253,7 +248,6 @@ namespace MarchingCubes.Algoritms.MarchingCubes
 
         private double? CalculateOrGetFromCache(MarchingFunction function, Point toCheck)
         {
-            //cache.Where(p => p.Vertex == toCheck);
             try
             {
                 var value = function(toCheck);
@@ -265,7 +259,6 @@ namespace MarchingCubes.Algoritms.MarchingCubes
             }
 
             return null;
-            //cache.Add(new CalculationCache() { Vertex = line.Point1 });
         }
 
         public MarchingCubesResults Generate(List<GridCube> cubes, double isoLevel)

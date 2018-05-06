@@ -40,7 +40,7 @@ namespace GradientDescentWPF.ViewModels
             {
                 Description = "Two - sheeted hyperboloid:" + Environment.NewLine + "x^2 - 3y^2 - z^2",
                 Region = new Region3D(-5, 5, -5, 5, -5, 5),
-                CountorLine = 1,
+                CountorLine = 4,
                 Step = 1,
                 Function = (args) =>
                 {

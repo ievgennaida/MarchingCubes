@@ -58,7 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Trackball\TrackballUtils.cs" />
     <Compile Include="Trackball\TrackMode.cs" />
-    <Compile Include="ModelConverter.cs" />
+    <Compile Include="ModelsConverter.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\CollectionViewModel.cs" />
     <Compile Include="ViewModels\FunctionData.cs" />

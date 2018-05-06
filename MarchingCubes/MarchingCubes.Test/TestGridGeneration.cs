@@ -30,10 +30,18 @@ namespace MarchingCubes.Test
         }
 
         [TestMethod]
-        public void CheckCubesBroken()
+        public void CheckCubes()
         {
-            var gridSize = 1f;
+            var gridSize = 0.5f;
             Сheck(-1.5, 1.5, gridSize);
+        }
+
+
+        [TestMethod]
+        public void CheckCubesFloat()
+        {
+            var gridSize = 0.5f;
+            Сheck(-0.5, 0, gridSize);
         }
 
         [TestMethod]
@@ -44,9 +52,9 @@ namespace MarchingCubes.Test
             Сheck(0, size, gridSize);
         }
 
-        public List<GridCube> Сheck(double fromSize, double size, double step)
+        public List<GridCube> Сheck(double from, double to, double step)
         {
-            var edgesPerSide = size / step;
+            var edgesPerSide = Region3D.GetLenght(from, to) / step;
             var countOfCubes = Math.Pow(edgesPerSide, 3);
 
             var vertexPerSide = edgesPerSide + 1;
@@ -57,7 +65,7 @@ namespace MarchingCubes.Test
 
 
             var marchingCubes = new MarchingCubesAlgorithm(null);
-            var region = new CommonTypes.Region3D(0, size, 0, size, 0, size);
+            var region = new CommonTypes.Region3D(from, to, from, to, from, to);
             var cubes = marchingCubes.BuildGrid(region, step);
 
             Assert.AreEqual(cubes.Count, countOfCubes);
@@ -93,9 +101,9 @@ namespace MarchingCubes.Test
 
             // Check last cube vertex
             var firstCube = cubes.FirstOrDefault();
-            CheckVertexes(firstCube, 0, step);
+            CheckVertexes(firstCube, from, from+step);
             var lastCube = cubes.LastOrDefault();
-            CheckVertexes(lastCube, size - step, size);
+            CheckVertexes(lastCube, to - step, to);
             return cubes;
         }
 

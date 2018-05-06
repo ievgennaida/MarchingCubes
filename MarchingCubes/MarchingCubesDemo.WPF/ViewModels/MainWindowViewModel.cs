@@ -43,7 +43,7 @@ namespace GradientDescentWPF.ViewModels
             var region = function.Region ?? new Region3D(0, defaultSize, 0, defaultSize, 0, defaultSize);
             var results = marchingCubes.Generate(region, step, function.CountorLine);
 
-            var converter = new ModelConverter();
+            var converter = new ModelsConverter();
             var grid = converter.RenderGrid(results.Grid, DrawVertexIndexes, null);
             viewPort.Children.Remove(gridModel);
             viewPort.Children.Add(grid);
