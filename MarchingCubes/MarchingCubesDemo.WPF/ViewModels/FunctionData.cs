@@ -15,6 +15,7 @@ namespace GradientDescentWPF.ViewModels
             get { return Function == null; }
         }
 
+        public Point CameraPosition { get; set; }
         public Region3D Region { get; set; }
         public double CountorLine { get; set; }
         public double Step { get; set; }

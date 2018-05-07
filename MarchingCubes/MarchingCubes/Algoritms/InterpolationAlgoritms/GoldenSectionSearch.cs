@@ -11,7 +11,7 @@ namespace MarchingCubes.Algoritms
     {
         protected MarchingFunction function;
         protected double accuracyEpsilon;
-        public GoldenSectionSearch(MarchingFunction function, double accuracyEpsilon = 0.05)
+        public GoldenSectionSearch(MarchingFunction function, double accuracyEpsilon = 0.01)
         {
             this.function = function;
             this.accuracyEpsilon = accuracyEpsilon;

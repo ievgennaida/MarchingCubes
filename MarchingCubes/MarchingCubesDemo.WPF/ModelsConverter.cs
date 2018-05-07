@@ -17,8 +17,11 @@ namespace MarchingCubesDemo.WPF
     /// </summary>
     public class ModelsConverter
     {
-        public ModelVisual3D RenderMesh(List<Triangle> triangles,
-            bool useNormalVectors)
+        public ModelVisual3D RenderMesh(
+            List<Triangle> triangles,
+            bool useNormals, 
+            bool showNormalVectors, 
+            bool doubleSided)
         {
             //countor line
             var modelToAdd = new ModelVisual3D();
@@ -29,35 +32,31 @@ namespace MarchingCubesDemo.WPF
             //List<Test> normals = new List<Test>();
             foreach (var triangle in triangles)
             {
-                // Draw normals
-                mesh.TriangleIndices.Add(index);
-                mesh.TriangleIndices.Add(++index);
-                mesh.TriangleIndices.Add(++index);
-                index++;
-                var p = Convert(triangle.Point1);
-                // if (useNormalVectors)
+                AddTriangle(mesh, triangle.Point1, triangle.Point2, triangle.Point3, index, useNormals);
+                index += 3;
+            }
+
+            if (showNormalVectors)
+            {
+                var i = 0;
+                foreach (var normal in mesh.Normals)
                 {
-                    var normal = triangle.GetNormal();
-                    //  VectorHelper.AddNormals(triangle, normal);
-                    // triangle.Point1.NormalVector = Vector3D.Add(triangle.Point1.NormalVector, normal);
-                    // triangle.Point2.NormalVector = Vector3D.Add(triangle.Point2.NormalVector, normal);
-                    // triangle.Point3.NormalVector = Vector3D.Add(triangle.Point3.NormalVector, normal);
-                   
+                    var point = mesh.Positions[i];
+                    var p = Convert(mesh.Positions[i]);
 
 
-                    mesh.Normals.Add(ConvertToVector(triangle.Point1.NormalVector));
-                    mesh.Normals.Add(ConvertToVector(triangle.Point2.NormalVector));
-                    mesh.Normals.Add(ConvertToVector(triangle.Point3.NormalVector));
-
-                //    var point = new MarchingCubes.CommonTypes.Point(b.X, b.Y, b.Z);
-                //    modelToAdd.Children.Add(GetLine(triangle.Point1, point, Colors.Blue));
+                    // var point = Vector3D.Add(,point.ad//normal.adnew MarchingCubes.CommonTypes.Point(b.X, b.Y, b.Z);
+                    modelToAdd.Children.Add(GetLine(p, new MarchingCubes.CommonTypes.Point(normal.X, normal.Y, normal.Z), Colors.Blue));
+                    i++;
                 }
+            }
 
-                //if (!triangle.IsInvalid)
+            if (doubleSided)
+            {
+                foreach (var triangle in triangles)
                 {
-                    mesh.Positions.Add(p);
-                    mesh.Positions.Add(Convert(triangle.Point2));
-                    mesh.Positions.Add(Convert(triangle.Point3));
+                    AddTriangle(mesh, triangle.Point3, triangle.Point2, triangle.Point1, index, useNormals);
+                    index += 3;
                 }
             }
 
@@ -73,7 +72,31 @@ namespace MarchingCubesDemo.WPF
             return modelToAdd;
         }
 
- 
+        private int AddTriangle(MeshGeometry3D mesh,
+            MarchingCubes.CommonTypes.Point p1, 
+            MarchingCubes.CommonTypes.Point p2,
+            MarchingCubes.CommonTypes.Point p3, 
+            int index, 
+            bool useNormalVectors)
+        {
+            // Draw normals
+            mesh.TriangleIndices.Add(index);
+            mesh.TriangleIndices.Add(++index);
+            mesh.TriangleIndices.Add(++index);
+
+            if (useNormalVectors)
+            {
+                mesh.Normals.Add(ConvertToVector(p1.NormalVector));
+                mesh.Normals.Add(ConvertToVector(p2.NormalVector));
+                mesh.Normals.Add(ConvertToVector(p3.NormalVector));
+            }
+
+            mesh.Positions.Add(Convert(p1));
+            mesh.Positions.Add(Convert(p2));
+            mesh.Positions.Add(Convert(p3));
+            return index;
+        }
+
 
         public static void AddNormals(Triangle triangle, Vector3D normal)
         {
@@ -83,6 +106,11 @@ namespace MarchingCubesDemo.WPF
         public Vector3D ConvertToVector(MarchingCubes.CommonTypes.Point point)
         {
             return new Vector3D(point.X, point.Y, point.Z);
+        }
+
+        public MarchingCubes.CommonTypes.Point Convert(Point3D point)
+        {
+            return new MarchingCubes.CommonTypes.Point(point.X, point.Y, point.Z);
         }
 
         public Point3D Convert(MarchingCubes.CommonTypes.Point point)

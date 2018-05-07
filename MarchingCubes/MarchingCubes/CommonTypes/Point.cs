@@ -42,7 +42,7 @@ namespace MarchingCubes.CommonTypes
 
         public Point NormalVector { get; set; }
 
-        public void AddAndMergeNormal(Point p)
+        public void MergeNormal(Point p)
         {
             if (this.NormalVector == null)
             {

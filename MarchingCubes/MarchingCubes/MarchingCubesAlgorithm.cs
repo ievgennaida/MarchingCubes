@@ -216,9 +216,9 @@ namespace MarchingCubes.Algoritms.MarchingCubes
                 var normalVector = triangle.GetNormal();
                 // All triangle points are merged togeher (Triangles share vertexes). 
                 // This is used to show smooth model.
-                triangle.Point1.AddAndMergeNormal(normalVector);
-                triangle.Point2.AddAndMergeNormal(normalVector);
-                triangle.Point3.AddAndMergeNormal(normalVector);
+                triangle.Point1.MergeNormal(normalVector);
+                triangle.Point2.MergeNormal(normalVector);
+                triangle.Point3.MergeNormal(normalVector);
                 toReturn.Add(triangle);
             }
 

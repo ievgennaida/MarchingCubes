@@ -28,6 +28,9 @@ namespace GradientDescentWPF.ViewModels
             this.Items.Add(new FunctionData()
             {
                 Description = "(x-2)^2/3+(y-30)^2/24+(z-45)^2/2",
+                Region = new Region3D(-5, 5, -5, 5, -5, 5),
+                CountorLine = 0.5,
+                Step = 0.25,
                 Function = (args) =>
                 {
                     var x = args.X - 2;
@@ -40,14 +43,14 @@ namespace GradientDescentWPF.ViewModels
             {
                 Description = "Two - sheeted hyperboloid:" + Environment.NewLine + "x^2 - 3y^2 - z^2",
                 Region = new Region3D(-5, 5, -5, 5, -5, 5),
-                CountorLine = 4,
-                Step = 1,
+                CountorLine = 0.5,
+                Step = 0.25,
                 Function = (args) =>
                 {
                     var x = args.X;
                     var y = args.Y;
                     var z = args.Z;
-                    return x * x + 3 * y * y * z * z;
+                    return x * x + 3 * y * y - z * z;
                 }
             });
 

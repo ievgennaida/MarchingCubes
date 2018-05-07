@@ -61,7 +61,7 @@ namespace MarchingCubesDemo.WPF.Trackball
             _transform.Children.Add(_scale);
             _transform.Children.Add(new RotateTransform3D(_rotation));
             _transform.Children.Add(_translate);
-            this.PanMode = true;
+            this.FreeLookupMode = true;
         }
 
         /// <summary>

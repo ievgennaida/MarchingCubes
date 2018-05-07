@@ -36,21 +36,29 @@ namespace GradientDescentWPF.ViewModels
 
             var step = function.Step;
 
-            IinterpolationAlgoritm interpolation = new GoldenSectionSearch(function.Function);
+            IinterpolationAlgoritm interpolation = new SimpleInterpolation();
+            if (UseGoldenSection)
+            {
+                interpolation = new GoldenSectionSearch(function.Function);
+            }
+
             //interpolation = new SimpleInterpolation(false);
             var marchingCubes = new MarchingCubes.Algoritms.MarchingCubes.MarchingCubesAlgorithm(function.Function, interpolation);
             var defaultSize = 10;
             var region = function.Region ?? new Region3D(0, defaultSize, 0, defaultSize, 0, defaultSize);
             var results = marchingCubes.Generate(region, step, function.CountorLine);
 
-            var converter = new ModelsConverter();
-            var grid = converter.RenderGrid(results.Grid, DrawVertexIndexes, null);
             viewPort.Children.Remove(gridModel);
-            viewPort.Children.Add(grid);
+            var converter = new ModelsConverter();
+            if (ShowGrid)
+            {
+                var grid = converter.RenderGrid(results.Grid, DrawVertexIndexes, null);
+                viewPort.Children.Add(grid);
 
-            gridModel = grid;
+                gridModel = grid;
+            }
 
-            var model = converter.RenderMesh(results.Triangles, false);
+            var model = converter.RenderMesh(results.Triangles, UseMeshNormals, ShowNormals, ShowTwoSided);
             viewPort.Children.Remove(meshModel);
             viewPort.Children.Add(model);
             meshModel = model;
@@ -61,11 +69,11 @@ namespace GradientDescentWPF.ViewModels
         ModelVisual3D gridModel;
         ModelVisual3D meshModel;
 
-        private void ResolveState()
+        private void Refresh()
         {
-
+            SetFunction(null);
         }
-    
+
         public bool PanMode
         {
             get
@@ -97,6 +105,7 @@ namespace GradientDescentWPF.ViewModels
                 {
                     this.units.FreeLookupMode = value;
                     OnPropertyChanged("FreeLookupMode");
+      
                 }
             }
         }
@@ -116,6 +125,7 @@ namespace GradientDescentWPF.ViewModels
                 {
                     this.drawGrid = value;
                     OnPropertyChanged("DrawGrid");
+                    Refresh();
                 }
             }
         }
@@ -135,10 +145,151 @@ namespace GradientDescentWPF.ViewModels
                 {
                     this.drawVertexIndexes = value;
                     OnPropertyChanged("DrawVertexIndexes");
+                    Refresh();
                 }
             }
         }
 
+        public bool showGrid;
+
+        public bool ShowGrid
+        {
+            get
+            {
+                return showGrid;
+            }
+
+            set
+            {
+                if (showGrid != value)
+                {
+                    this.showGrid = value;
+                    OnPropertyChanged("ShowGrid");
+                    Refresh();
+                }
+            }
+        }
+
+
+        public bool showTwoSided;
+
+        public bool ShowTwoSided
+        {
+            get
+            {
+                return showTwoSided;
+            }
+
+            set
+            {
+                if (showTwoSided != value)
+                {
+                    this.showTwoSided = value;
+                    OnPropertyChanged("ShowTwoSided");
+                    Refresh();
+                }
+            }
+        }
+        public bool showNormals;
+
+        public bool ShowNormals
+        {
+            get
+            {
+                return showNormals;
+            }
+
+            set
+            {
+                if (showNormals != value)
+                {
+                    this.showNormals = value;
+                    OnPropertyChanged("ShowNormals");
+                    Refresh();
+                }
+            }
+        }
+
+        public bool useMeshNormals;
+
+        public bool UseMeshNormals
+        {
+            get
+            {
+                return this.useMeshNormals;
+            }
+
+            set
+            {
+                if (useMeshNormals != value)
+                {
+                    this.useMeshNormals = value;
+                    OnPropertyChanged("UseMeshNormals");
+                    Refresh();
+                }
+            }
+        }
+
+
+        public bool useMathInterpolation = true;
+
+        public bool UseMathInterpolation
+        {
+            get
+            {
+                return this.useMathInterpolation;
+            }
+
+            set
+            {
+                if (this.useMathInterpolation != value)
+                {
+                    this.useMathInterpolation = value;
+                    OnPropertyChanged("UseMathInterpolation");
+                    Refresh();
+                }
+            }
+        }
+
+        public bool useGoldenSection;
+
+        public bool UseGoldenSection
+        {
+            get
+            {
+                return this.useGoldenSection;
+            }
+
+            set
+            {
+                if (useGoldenSection != value)
+                {
+                    this.useGoldenSection = value;
+                    OnPropertyChanged("UseGoldenSection");
+                    Refresh();
+                }
+            }
+        }
+
+        public bool useGradientDescent;
+
+        public bool UseGradientDescent
+        {
+            get
+            {
+                return this.useGradientDescent;
+            }
+
+            set
+            {
+                if (this.useGradientDescent != value)
+                {
+                    this.useGradientDescent = value;
+                    OnPropertyChanged("UseGradientDescent");
+                    Refresh();
+                }
+            }
+        }
 
         public bool showFunctionsPanel;
 
