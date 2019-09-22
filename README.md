@@ -1,6 +1,6 @@
 # MarchingCubes
 
-University project. 3d,2d C# Implementation of the Marching cubes algorithm 
+University project, 3D C# Implementation of the Marching Cubes algorithm 
 
 ![Marching Cubes](image.png)
 
